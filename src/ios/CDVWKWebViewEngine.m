@@ -62,7 +62,27 @@
         self.engineWebView = [[WKWebView alloc] initWithFrame:frame];
     }
 
+    // Xcode 10+, white space workaround -- scroll down webview when keyboard hides
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                            selector:@selector(keyboardWillHide)
+                                                name:UIKeyboardWillHideNotification
+                                            object:nil];
+
     return self;
+}
+
+// Xcode 10+, white space workaround -- scroll down webview when keyboard hides
+-(void)keyboardWillHide
+{
+    if (@available(iOS 12.0, *)) {
+        WKWebView *webview = (WKWebView*)self.webView;
+        for(UIView* v in webview.subviews){
+            if([v isKindOfClass:NSClassFromString(@"WKScrollView")]){
+                UIScrollView *scrollView = (UIScrollView*)v;
+                [scrollView setContentOffset:CGPointMake(0, 0)];
+            }
+        }
+    }
 }
 
 - (WKWebViewConfiguration*) createConfigurationFromSettings:(NSDictionary*)settings
