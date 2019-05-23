@@ -85,16 +85,6 @@
 //     }
 // }
 
-// Workaorund for this:
-// https://github.com/ionic-team/ionic-v3/issues/113
-// Flickering on iOS
-@implementation UIScrollView (NoBounce)
-- (void)didMoveToWindow {
-   [super didMoveToWindow];
-   self.bounces = NO;
-}
-@end
-
 - (WKWebViewConfiguration*) createConfigurationFromSettings:(NSDictionary*)settings
 {
     WKWebViewConfiguration* configuration = [[WKWebViewConfiguration alloc] init];
@@ -528,4 +518,15 @@ static void * KVOContext = &KVOContext;
     [self.scriptMessageHandler userContentController:userContentController didReceiveScriptMessage:message];
 }
 
+@end
+
+
+// Workaorund for this:
+// https://github.com/ionic-team/ionic-v3/issues/113
+// Flickering on iOS
+@implementation UIScrollView (NoBounce)
+- (void)didMoveToWindow {
+   [super didMoveToWindow];
+   self.bounces = NO;
+}
 @end
