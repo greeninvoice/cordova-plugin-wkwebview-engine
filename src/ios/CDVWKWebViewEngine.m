@@ -63,27 +63,37 @@
     }
 
     // Xcode 10+, white space workaround -- scroll down webview when keyboard hides
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                            selector:@selector(keyboardWillHide)
-                                                name:UIKeyboardWillHideNotification
-                                            object:nil];
+    // [[NSNotificationCenter defaultCenter] addObserver:self
+    //                                         selector:@selector(keyboardWillHide)
+    //                                             name:UIKeyboardWillHideNotification
+    //                                         object:nil];
 
     return self;
 }
 
 // Xcode 10+, white space workaround -- scroll down webview when keyboard hides
--(void)keyboardWillHide
-{
-    if (@available(iOS 12.0, *)) {
-        WKWebView *webview = (WKWebView*)self.webView;
-        for(UIView* v in webview.subviews){
-            if([v isKindOfClass:NSClassFromString(@"WKScrollView")]){
-                UIScrollView *scrollView = (UIScrollView*)v;
-                [scrollView setContentOffset:CGPointMake(0, 0)];
-            }
-        }
-    }
+// -(void)keyboardWillHide
+// {
+//     if (@available(iOS 12.0, *)) {
+//         WKWebView *webview = (WKWebView*)self.webView;
+//         for(UIView* v in webview.subviews){
+//             if([v isKindOfClass:NSClassFromString(@"WKScrollView")]){
+//                 UIScrollView *scrollView = (UIScrollView*)v;
+//                 [scrollView setContentOffset:CGPointMake(0, 0)];
+//             }
+//         }
+//     }
+// }
+
+// Workaorund for this:
+// https://github.com/ionic-team/ionic-v3/issues/113
+// Flickering on iOS
+@implementation UIScrollView (NoBounce)
+- (void)didMoveToWindow {
+   [super didMoveToWindow];
+   self.bounces = NO;
 }
+@end
 
 - (WKWebViewConfiguration*) createConfigurationFromSettings:(NSDictionary*)settings
 {
